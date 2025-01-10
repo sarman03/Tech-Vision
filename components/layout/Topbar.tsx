@@ -1,13 +1,12 @@
 'use client'
 import { useAuth, UserButton } from '@clerk/nextjs'
 import { Search } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
 
 const Topbar = () => {
-  const {isSignedIn}= useAuth();
+  const { isSignedIn }= useAuth();
   const topRoutes = [
     { label: "Instructor", path: "/instructor/courses" },
     { label: "Learning", path: "/learning" },
@@ -16,7 +15,7 @@ const Topbar = () => {
   return (
     <div className='flex justify-between items-center p-4'>
       <Link href='/'>
-      <Image src="/logo.png" height={100} width={200} alt='logo'  />
+        <div>Logo</div>
       </Link>
 
     <div className='max-md:hidden w-[400px] rounded-full flex'>
@@ -38,7 +37,7 @@ const Topbar = () => {
           ))}
       </div>
       {isSignedIn ? 
-      (<UserButton afterSignOutUrl='/sign-in'/>) 
+      (<UserButton />) 
       : ( 
       <Link href='/sign-in'> <Button>Sign In</Button></Link>
       )}
