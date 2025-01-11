@@ -85,3 +85,5 @@ body {
 .cl-formButtonPrimary:hover{
   background-color: #FFC107
 }
+
+@import "@uploadthing/react/styles.css";
