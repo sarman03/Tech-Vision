@@ -19,7 +19,7 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
-import { Trash } from "lucide-react";
+import Delete from "../custom/Delete";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -59,11 +59,11 @@ const EditCourseForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: course.title,
+      title: course.title || "",
       subtitle: course.subtitle || "",
       description: course.description || "",
-      categoryId: course.categoryId,
-      subCategoryId: course.subCategoryId,
+      categoryId: course.categoryId || "",
+      subCategoryId: course.subCategoryId || "",
       levelId: course.levelId || "",
       imageUrl: course.imageUrl || "",
       price: course.price || undefined,
@@ -103,8 +103,8 @@ const EditCourseForm = ({
         </div>
 
         <div className="flex gap-5 items-start">
-          <Button variant="outline">Preview</Button>
-          <Button><Trash /></Button>
+          <Button variant="outline">Publish</Button>
+          <Delete item="course" courseId={course.id} />
         </div>
       </div>
 
@@ -236,6 +236,7 @@ const EditCourseForm = ({
                     value={field.value || ""}
                     onChange={(url) => field.onChange(url)}
                     endpoint="courseBanner"
+                    page="Edit Course"
                   />
                 </FormControl>
                 <FormMessage />

@@ -12,6 +12,7 @@ import axios from "axios"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 import { useAuth } from "@clerk/nextjs"
+import { Loader2 } from "lucide-react"
 
 const formSchema = z.object({
     title: z.string().min(2, {
@@ -45,6 +46,8 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
           subCategoryId: "",
         },
     });
+
+    const { isValid, isSubmitting } = form.formState;
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
       if (!isSignedIn) {
@@ -130,7 +133,13 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
               )}
             />
   
-            <Button type="submit">Submit</Button>
+  <Button type="submit" disabled={!isValid || isSubmitting}>
+            {isSubmitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              "Create"
+            )}
+          </Button>
           </form>
         </Form>
       </div>
