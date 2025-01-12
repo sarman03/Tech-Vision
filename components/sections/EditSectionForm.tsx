@@ -92,9 +92,9 @@ const EditSectionForm = ({
             isPublished={section.isPublished}
             page="Section"
           />
-          <Button>
+        
             <Delete item="section" courseId={courseId} sectionId={section.id} />
-          </Button>
+  
         </div>
       </div>
 
@@ -141,14 +141,14 @@ const EditSectionForm = ({
             )}
           />
 
-          {section.videoUrl && (
-            <div className="my-5">
-              <MuxPlayer
-                playbackId={section.muxData?.playbackId || ""}
-                className="md:max-w-[600px]"
-              />
-            </div>
-          )}
+{section.videoUrl && section.muxData?.playbackId && (
+  <div className="my-5">
+    <MuxPlayer
+      playbackId={section.muxData.playbackId}
+      className="md:max-w-[600px]"
+    />
+  </div>
+)}
 
           <FormField
             control={form.control}
