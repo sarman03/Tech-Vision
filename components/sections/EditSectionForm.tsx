@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import ResourceForm from "./ResourceForm";
 import Delete from "../custom/Delete";
+import PublishButton from "../custom/PublishButton";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -84,7 +85,13 @@ const EditSectionForm = ({
         </Link>
 
         <div className="flex gap-5 items-start">
-          <Button variant="outline">Publish</Button>
+        <PublishButton
+            disabled={!isCompleted}
+            courseId={courseId}
+            sectionId={section.id}
+            isPublished={section.isPublished}
+            page="Section"
+          />
           <Button>
             <Delete item="section" courseId={courseId} sectionId={section.id} />
           </Button>

@@ -1,3 +1,4 @@
+import AlertBanner from "@/components/custom/AlertBanner";
 import EditSectionForm from "@/components/sections/EditSectionForm"
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
@@ -41,10 +42,19 @@ const SectionsDetailPage = async({
     return redirect(`/instructor/courses/${params.courseId}/sections`);
   }
 
-  const isCompleted = false;
+  const requiredFields = [section.title, section.description, section.videoUrl];
+  const requiredFieldsCount = requiredFields.length;
+  const missingFields = requiredFields.filter((field) => !Boolean(field)); // Return falsy values: undefined, null, 0, false, NaN, ''
+  const missingFieldsCount = missingFields.length;
+  const isCompleted = requiredFields.every(Boolean);
 
   return (
     <div className="px-10">
+      <AlertBanner
+        isCompleted={isCompleted}
+        requiredFieldsCount={requiredFieldsCount}
+        missingFieldsCount={missingFieldsCount}
+      />
       <EditSectionForm section={section}
         courseId={resolvedParams.courseId}
         isCompleted={isCompleted}/>

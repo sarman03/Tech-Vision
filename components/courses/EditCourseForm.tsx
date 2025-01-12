@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import Delete from "../custom/Delete";
+import PublishButton from "../custom/PublishButton";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -46,12 +47,14 @@ interface EditCourseFormProps {
     subCategories: { label: string; value: string }[];
   }[];
   levels: { label: string; value: string }[];
-}
+  isCompleted: boolean;
+} 
 
 const EditCourseForm = ({
   course,
   categories,
   levels,
+  isCompleted,
 }: EditCourseFormProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -103,7 +106,12 @@ const EditCourseForm = ({
         </div>
 
         <div className="flex gap-5 items-start">
-          <Button variant="outline">Publish</Button>
+        <PublishButton
+            disabled={!isCompleted}
+            courseId={course.id}
+            isPublished={course.isPublished}
+            page="Course"
+          />
           <Delete item="course" courseId={course.id} />
         </div>
       </div>
