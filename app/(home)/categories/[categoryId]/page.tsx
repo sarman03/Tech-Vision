@@ -1,27 +1,25 @@
-import { db } from "@/lib/db";
-import getCoursesByCategory from "../actions/getCourses";
+import getCoursesByCategory from "@/app/actions/getCourses";
 import CourseCard from "@/components/courses/CourseCard";
 import Categories from "@/components/custom/Categories";
+import { db } from "@/lib/db";
 
-export default async function Home() {
+const CoursesByCategory = async ({
+  params,
+}: {
+  params: { categoryId: string };
+}) => {
+    const resolvedParams= await params;
   const categories = await db.category.findMany({
     orderBy: {
       name: "asc",
     },
-    include: {
-      subCategories: {
-        orderBy: {
-          name: "asc",
-        },
-      },
-    },
   });
 
-  const courses = await getCoursesByCategory(null);
+  const courses = await getCoursesByCategory(resolvedParams.categoryId);
 
   return (
     <div className="md:mt-5 md:px-10 xl:px-16 pb-16">
-      <Categories categories={categories} selectedCategory={null} />
+      <Categories categories={categories} selectedCategory={resolvedParams.categoryId} />
       <div className="flex flex-wrap gap-7 justify-center">
         {courses.map((course) => (
           <CourseCard key={course.id} course={course} />
@@ -29,4 +27,6 @@ export default async function Home() {
       </div>
     </div>
   );
-}
+};
+
+export default CoursesByCategory;
