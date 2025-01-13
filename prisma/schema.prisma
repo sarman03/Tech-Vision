@@ -32,6 +32,8 @@ model Course {
 
   sections Section[]
 
+  purchases Purchase[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
@@ -127,4 +129,28 @@ model Progress {
   updatedAt DateTime @default(now())
 
   @@index([sectionId])
+  @@unique([studentId, sectionId])
+}
+
+model Purchase {
+  id         String @id @default(uuid())
+  customerId String 
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@index([courseId])
+  @@unique([customerId, courseId])
+}
+
+model StripeCustomer {
+  id               String @id @default(uuid())
+  customerId       String @unique
+  stripeCustomerId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

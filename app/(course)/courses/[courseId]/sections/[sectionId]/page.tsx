@@ -1,5 +1,7 @@
+import SectionsDetails from "@/components/sections/SectionsDetails";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import { Resource } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 const SectionDetailsPage = async ({
@@ -19,13 +21,13 @@ const SectionDetailsPage = async ({
       id: courseId,
       isPublished: true,
     },
-    // include: {
-    //   sections: {
-    //     where: {
-    //       isPublished: true,
-    //     },
-    //   },
-    // },
+    include: {
+      sections: {
+        where: {
+          isPublished: true,
+        },
+      },
+    },
   });
 
   if (!course) {
@@ -43,9 +45,40 @@ const SectionDetailsPage = async ({
   if (!section) {
     return redirect(`/courses/${courseId}/overview`);
   }
+
+  const purchase = await db.purchase.findUnique({
+    where: {
+      customerId_courseId: {
+        customerId: userId,
+        courseId,
+      },
+    },
+  });
+
+  const muxData = null;
+  const resources: Resource[] = [];
+
+  const progress = await db.progress.findUnique({
+    where: {
+      studentId_sectionId: {
+        studentId: userId,
+        sectionId,
+      },
+    },
+  });
   
 
-  return <div></div>;
+  return (
+
+    <SectionsDetails
+      course={course}
+      section={section}
+      purchase={purchase}
+      muxData={muxData}
+      resources={resources}
+      progress={progress}
+    />
+  )
 };
 
 export default SectionDetailsPage;
