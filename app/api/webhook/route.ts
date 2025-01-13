@@ -31,13 +31,18 @@ try {
       return new NextResponse("Missing metadata", { status: 400 });
     }
 
-    await db.purchase.create({
-        data: {
-          customerId,
-          courseId,
-        },
-      });
-    } else {
+    try {
+        await db.purchase.create({
+            data: {
+                customerId,
+                courseId,
+            },
+        });
+    } catch (error) {
+        console.error("Error creating purchase record:", error);
+        return new NextResponse("Internal Server Error", { status: 500 });
+    }
+  } else {
         return new NextResponse(`Unhandled event type: ${event.type}`, {
           status: 400,
         });

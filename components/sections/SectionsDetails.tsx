@@ -2,7 +2,7 @@
 import { Course, MuxData, Progress, Purchase, Resource, Section } from "@prisma/client";
 import axios from "axios";
 import { File, Loader2, Lock } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import MuxPlayer from "@mux/mux-player-react";
@@ -31,6 +31,12 @@ const SectionsDetails = ({
 
     const [isLoading, setIsLoading] = useState(false);
     const isLocked = !purchase && !section.isFree;
+    const [playerInitTime, setPlayerInitTime] = useState<number | null>(null);
+
+    useEffect(() => {
+        // Set the player init time only on the client
+        setPlayerInitTime(Date.now());
+    }, []);
 
     const buyCourse = async () => {
         try {
@@ -82,6 +88,7 @@ const SectionsDetails = ({
         <MuxPlayer
           playbackId={muxData?.playbackId || ""}
           className="md:max-w-[600px]"
+          player-init-time={playerInitTime}
         />
       )}
 

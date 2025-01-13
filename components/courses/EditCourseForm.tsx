@@ -21,6 +21,7 @@ import axios from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import Delete from "../custom/Delete";
 import PublishButton from "../custom/PublishButton";
+import { useState } from "react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -59,6 +60,8 @@ const EditCourseForm = ({
   const router = useRouter();
   const pathname = usePathname();
 
+  const [price, setPrice] = useState(course.price !== undefined ? String(course.price) : "");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,7 +72,8 @@ const EditCourseForm = ({
       subCategoryId: course.subCategoryId || "",
       levelId: course.levelId || "",
       imageUrl: course.imageUrl || "",
-      price: course.price || undefined,
+      //@ts-expect-error error
+      price: course.price !== undefined ? String(course.price) : "",
     },
   });
 
@@ -265,7 +269,12 @@ const EditCourseForm = ({
                     type="number"
                     step="0.01"
                     placeholder="5000"
-                    {...field}
+                    value={price}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setPrice(value);
+                      field.onChange(value);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
